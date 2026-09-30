@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import { ToastProvider } from './components/Toast';
+import ScrollToTop from './components/ScrollToTop';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -19,8 +20,6 @@ import AdminStudents from './pages/AdminStudents';
 import AdminReviews from './pages/AdminReviews';
 import AdminSettings from './pages/AdminSettings';
 import NotFound from './pages/NotFound';
-import ScrollToTop from './components/ScrollToTop';
-
 
 function RequireAuth({ role }) {
   const { user } = useAuth();
@@ -42,7 +41,7 @@ export default function App() {
       <DataProvider>
         <ToastProvider>
           <BrowserRouter>
-          <ScrollToTop />
+            <ScrollToTop />
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
