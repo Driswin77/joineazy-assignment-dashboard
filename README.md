@@ -58,3 +58,11 @@ No backend. No database. All data is mock data.
 ## Demo Accounts
 
 **Student**
+
+## Round 2 Enhancements
+
+- Course-first dashboards for both roles — click a course to open its assignments
+- Submission types: Individual and Group
+- Group leader acknowledgment — when the leader submits, all members are marked as submitted
+- Group member panel on the assignment page with per-member status
+- "Not in a group" and "Waiting for leader" states for group assignments
