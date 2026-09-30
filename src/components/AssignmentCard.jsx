@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CalendarDays } from 'lucide-react';
 import StatusBadge from './StatusBadge';
-import { formatDate } from '../utils/calculations';
+import { formatDate, formatTime } from '../utils/calculations';
 
 export default function AssignmentCard({ assignment, status }) {
   return (
@@ -21,6 +21,7 @@ export default function AssignmentCard({ assignment, status }) {
       <div className="mt-4 flex items-center gap-2 text-xs text-slate-500">
         <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
         Due {formatDate(assignment.dueDate)}
+        {assignment.dueTime ? ` · ${formatTime(assignment.dueTime)}` : ''}
       </div>
 
       <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">

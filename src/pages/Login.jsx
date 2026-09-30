@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 import { demoAccounts } from '../data/mockData';
 import Logo from '../components/Logo';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const { login } = useAuth();
@@ -136,6 +136,12 @@ export default function Login() {
               {submitting ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
+          <p className="mt-4 text-center text-xs text-slate-500">
+            Don't have an account?{' '}
+            <Link to="/register" className="font-medium text-brand-600 hover:text-brand-700">
+              Create one
+            </Link>
+          </p>
 
           <div className="mt-6 border-t border-slate-100 pt-5">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">

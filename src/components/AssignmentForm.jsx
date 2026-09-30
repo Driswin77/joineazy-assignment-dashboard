@@ -11,8 +11,10 @@ function emptyValues() {
     description: '',
     instructions: '',
     dueDate: '',
+    dueTime: '',
     maxMarks: '',
     submissionLink: '',
+    submissionType: 'individual',
   };
 }
 
@@ -25,8 +27,10 @@ function toFormValues(initialValues) {
     description: initialValues.description ?? '',
     instructions: initialValues.instructions ?? '',
     dueDate: initialValues.dueDate ?? '',
+    dueTime: initialValues.dueTime ?? '',
     maxMarks: initialValues.maxMarks != null ? String(initialValues.maxMarks) : '',
     submissionLink: initialValues.submissionLink ?? '',
+    submissionType: initialValues.submissionType ?? 'individual',
   };
 }
 
@@ -46,6 +50,8 @@ function validate(values, enrolled) {
   } else if (Number.isNaN(new Date(values.dueDate).getTime())) {
     errors.dueDate = 'Enter a valid date.';
   }
+
+  if (!values.dueTime) errors.dueTime = 'Due time is required.';
 
   const marks = Number(values.maxMarks);
   if (!values.maxMarks) errors.maxMarks = 'Maximum marks is required.';
@@ -111,8 +117,10 @@ export default function AssignmentForm({
       description: values.description.trim(),
       instructions: values.instructions.trim(),
       dueDate: values.dueDate,
+      dueTime: values.dueTime,
       maxMarks: Number(values.maxMarks),
       submissionLink: values.submissionLink.trim(),
+      submissionType: values.submissionType,
       assignedTo: enrolled.map((student) => student.id),
     });
   };
@@ -135,7 +143,7 @@ export default function AssignmentForm({
             />
           </Field>
 
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-5 sm:grid-cols-3">
             <Field
               label="Course"
               htmlFor="course"
@@ -164,7 +172,48 @@ export default function AssignmentForm({
                 aria-describedby={errors.dueDate ? 'dueDate-error' : undefined}
               />
             </Field>
+
+            <Field label="Due time" htmlFor="dueTime" error={errors.dueTime}>
+              <input
+                id="dueTime"
+                name="dueTime"
+                type="time"
+                value={values.dueTime}
+                onChange={(event) => updateField('dueTime', event.target.value)}
+                className="input"
+                aria-invalid={Boolean(errors.dueTime)}
+                aria-describedby={errors.dueTime ? 'dueTime-error' : undefined}
+              />
+            </Field>
           </div>
+
+          <Field label="Submission type" htmlFor="submissionType">
+            <div className="flex gap-2">
+              {['individual', 'group'].map((type) => {
+                const active = values.submissionType === type;
+                return (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => updateField('submissionType', type)}
+                    aria-pressed={active}
+                    className={`flex-1 rounded-lg border px-3 py-2.5 text-sm font-medium capitalize transition-colors ${
+                      active
+                        ? 'border-brand-300 bg-brand-50 text-brand-700'
+                        : 'border-slate-200 text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    {type}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="mt-1.5 text-xs text-slate-500">
+              {values.submissionType === 'group'
+                ? 'Only the group leader can acknowledge. All members will be marked as submitted.'
+                : 'Every student must acknowledge their own submission.'}
+            </p>
+          </Field>
 
           {values.course.trim() ? (
             <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-4">
@@ -250,7 +299,7 @@ export default function AssignmentForm({
               label="Submission link"
               htmlFor="submissionLink"
               error={errors.submissionLink}
-              hint="Google Drive folder or any external upload link."
+              hint="OneDrive link or any external upload folder."
             >
               <input
                 id="submissionLink"
@@ -258,7 +307,7 @@ export default function AssignmentForm({
                 type="url"
                 value={values.submissionLink}
                 onChange={(event) => updateField('submissionLink', event.target.value)}
-                placeholder="https://drive.google.com/drive/folders/..."
+                placeholder="https://onedrive.live.com/..."
                 className="input"
                 aria-invalid={Boolean(errors.submissionLink)}
                 aria-describedby={errors.submissionLink ? 'submissionLink-error' : undefined}

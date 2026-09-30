@@ -136,3 +136,13 @@ export function getStudentsByCourse(students, course) {
     student.enrolledCourses.some((item) => item.toLowerCase() === target)
   );
 }
+
+export function formatTime(timeValue) {
+  if (!timeValue) return '';
+  const [hours, minutes] = timeValue.split(':');
+  const h = Number(hours);
+  if (Number.isNaN(h)) return timeValue;
+  const suffix = h >= 12 ? 'PM' : 'AM';
+  const display = h % 12 === 0 ? 12 : h % 12;
+  return `${display}:${minutes} ${suffix}`;
+}

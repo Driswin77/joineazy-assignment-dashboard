@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ClipboardList, Layers, Plus, Search } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import { useToast } from '../components/Toast';
@@ -23,10 +23,13 @@ const FILTERS = [
 export default function AdminAssignments() {
   const { assignments, submissions, deleteAssignment } = useData();
   const { showToast } = useToast();
+  const [searchParams] = useSearchParams();
+
+  const initialCourse = searchParams.get('course') ?? 'all';
 
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
-  const [courseFilter, setCourseFilter] = useState('all');
+  const [courseFilter, setCourseFilter] = useState(initialCourse);
   const [activeCourse, setActiveCourse] = useState(null);
   const [pendingDelete, setPendingDelete] = useState(null);
 

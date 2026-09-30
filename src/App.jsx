@@ -4,6 +4,7 @@ import { DataProvider } from './context/DataContext';
 import { ToastProvider } from './components/Toast';
 import Layout from './components/Layout';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import StudentDashboard from './pages/StudentDashboard';
 import StudentAssignments from './pages/StudentAssignments';
 import StudentCalendar from './pages/StudentCalendar';
@@ -19,6 +20,7 @@ import AdminReviews from './pages/AdminReviews';
 import AdminSettings from './pages/AdminSettings';
 import NotFound from './pages/NotFound';
 import ScrollToTop from './components/ScrollToTop';
+
 
 function RequireAuth({ role }) {
   const { user } = useAuth();
@@ -43,6 +45,7 @@ export default function App() {
           <ScrollToTop />
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/" element={<HomeRedirect />} />
 
               <Route element={<RequireAuth />}>

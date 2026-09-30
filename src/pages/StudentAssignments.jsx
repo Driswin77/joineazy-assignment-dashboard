@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 import AssignmentCard from '../components/AssignmentCard';
 import EmptyState from '../components/EmptyState';
+import { useSearchParams } from 'react-router-dom';
+
 import {
   getStatus,
   getStudentAssignments,
@@ -27,9 +29,12 @@ const HEADINGS = {
 export default function StudentAssignments({ filter = 'all' }) {
   const { user } = useAuth();
   const { assignments, submissions } = useData();
+  const [searchParams] = useSearchParams();
+
+  const initialCourse = searchParams.get('course') ?? 'all';
 
   const [activeFilter, setActiveFilter] = useState(filter);
-  const [activeCourse, setActiveCourse] = useState('all');
+  const [activeCourse, setActiveCourse] = useState(initialCourse);
   const [query, setQuery] = useState('');
 
   const heading = HEADINGS[activeFilter] ?? HEADINGS.all;

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { admin, createInitialData, students } from '../data/mockData';
+import { admin, createInitialData, groups, students } from '../data/mockData';
 import { STORAGE_KEYS, readStorage, writeStorage } from '../utils/storage';
 
 const DataContext = createContext(null);
@@ -87,29 +87,46 @@ export function DataProvider({ children }) {
 
   const markSubmitted = useCallback((assignmentId, studentId) => {
     setData((current) => {
+      const assignment = current.assignments.find((item) => item.id === assignmentId);
       const submittedAt = new Date().toISOString();
 
-      const exists = current.submissions.some(
-        (submission) => submission.assignmentId === assignmentId && submission.studentId === studentId
-      );
+      let targetStudentIds = [studentId];
 
-      const submissions = exists
-        ? current.submissions.map((submission) =>
-            submission.assignmentId === assignmentId && submission.studentId === studentId
+      if (assignment?.submissionType === 'group') {
+        const group = groups.find(
+          (item) => item.course === assignment.course && item.leaderId === studentId
+        );
+
+        if (group) {
+          targetStudentIds = group.memberIds;
+        }
+      }
+
+      let submissions = [...current.submissions];
+
+      targetStudentIds.forEach((sid) => {
+        const exists = submissions.some(
+          (submission) =>
+            submission.assignmentId === assignmentId && submission.studentId === sid
+        );
+
+        if (exists) {
+          submissions = submissions.map((submission) =>
+            submission.assignmentId === assignmentId && submission.studentId === sid
               ? { ...submission, status: 'submitted', submittedAt }
               : submission
-          )
-        : [
-            ...current.submissions,
-            {
-              id: `${assignmentId}-${studentId}`,
-              assignmentId,
-              studentId,
-              status: 'submitted',
-              submittedAt,
-              marks: null,
-            },
-          ];
+          );
+        } else {
+          submissions.push({
+            id: `${assignmentId}-${sid}`,
+            assignmentId,
+            studentId: sid,
+            status: 'submitted',
+            submittedAt,
+            marks: null,
+          });
+        }
+      });
 
       return { ...current, submissions };
     });
@@ -135,6 +152,7 @@ export function DataProvider({ children }) {
       assignments: data.assignments,
       submissions: data.submissions,
       students,
+      groups,
       createAssignment,
       updateAssignment,
       deleteAssignment,

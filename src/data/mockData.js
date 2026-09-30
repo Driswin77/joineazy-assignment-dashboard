@@ -59,7 +59,7 @@ export const students = [
     course: 'B.Tech Computer Science',
     year: '3rd year',
     rollNo: 'CSE-21-032',
-    enrolledCourses: ['Data Structures', 'Operating Systems'],
+    enrolledCourses: ['Data Structures', 'Operating Systems', 'Web Development'],
   },
   {
     id: 'u5',
@@ -82,6 +82,30 @@ export const students = [
     year: '3rd year',
     rollNo: 'CSE-21-052',
     enrolledCourses: ['Database Systems', 'Data Structures', 'Operating Systems'],
+  },
+];
+
+export const groups = [
+  {
+    id: 'g1',
+    name: 'Team Alpha',
+    course: 'Web Development',
+    leaderId: 'u1',
+    memberIds: ['u1', 'u2', 'u3'],
+  },
+  {
+    id: 'g2',
+    name: 'Team Beta',
+    course: 'Web Development',
+    leaderId: 'u5',
+    memberIds: ['u5', 'u4'],
+  },
+  {
+    id: 'g3',
+    name: 'Data Crew',
+    course: 'Database Systems',
+    leaderId: 'u6',
+    memberIds: ['u6', 'u2'],
   },
 ];
 
@@ -111,9 +135,11 @@ const assignmentSeed = [
     instructions:
       'Use React with functional components and hooks. Keep the layout responsive down to 390px. Push the source code to the shared Drive folder and include a short README describing your component structure.',
     dueInDays: 3,
+    dueTime: '23:59',
     createdInDays: -9,
     maxMarks: 50,
     submissionLink: 'https://drive.google.com/drive/folders/joineazy-react-dashboard',
+    submissionType: 'group',
   },
   {
     id: 'a2',
@@ -123,9 +149,11 @@ const assignmentSeed = [
     instructions:
       'Answer all 12 questions in a single .sql file. Use comments to number each answer. Upload the file to the Drive folder.',
     dueInDays: -2,
+    dueTime: '17:00',
     createdInDays: -14,
     maxMarks: 30,
     submissionLink: 'https://drive.google.com/drive/folders/joineazy-sql-queries',
+    submissionType: 'individual',
   },
   {
     id: 'a3',
@@ -135,9 +163,11 @@ const assignmentSeed = [
     instructions:
       'Include problem statement, wireframes and a short rationale. Export as PDF and place it in the Drive folder.',
     dueInDays: 8,
+    dueTime: '23:59',
     createdInDays: -6,
     maxMarks: 40,
     submissionLink: 'https://drive.google.com/drive/folders/joineazy-ux-case-study',
+    submissionType: 'individual',
   },
   {
     id: 'a4',
@@ -147,9 +177,11 @@ const assignmentSeed = [
     instructions:
       'Submit one .js file per problem in a single folder. Do not use external libraries.',
     dueInDays: -6,
+    dueTime: '18:00',
     createdInDays: -20,
     maxMarks: 25,
     submissionLink: 'https://drive.google.com/drive/folders/joineazy-es6-practice',
+    submissionType: 'individual',
   },
   {
     id: 'a5',
@@ -159,9 +191,11 @@ const assignmentSeed = [
     instructions:
       'The project must include at least three routes, form validation and a responsive layout. Submit the repository link and a screenshot walkthrough.',
     dueInDays: 16,
+    dueTime: '23:59',
     createdInDays: -4,
     maxMarks: 100,
     submissionLink: 'https://drive.google.com/drive/folders/joineazy-web-project',
+    submissionType: 'group',
   },
   {
     id: 'a6',
@@ -171,9 +205,11 @@ const assignmentSeed = [
     instructions:
       'Include the ER diagram, relational schema and a short note on the normalisation steps. Upload a single PDF.',
     dueInDays: 21,
+    dueTime: '17:00',
     createdInDays: -3,
     maxMarks: 50,
     submissionLink: 'https://drive.google.com/drive/folders/joineazy-db-design',
+    submissionType: 'group',
   },
   {
     id: 'a7',
@@ -183,9 +219,11 @@ const assignmentSeed = [
     instructions:
       'Submit source files along with a short complexity note for each problem.',
     dueInDays: 1,
+    dueTime: '23:59',
     createdInDays: -11,
     maxMarks: 40,
     submissionLink: 'https://drive.google.com/drive/folders/joineazy-ds-problems',
+    submissionType: 'individual',
   },
   {
     id: 'a8',
@@ -195,9 +233,11 @@ const assignmentSeed = [
     instructions:
       'Follow the standard lab format. Include output screenshots for every experiment.',
     dueInDays: 11,
+    dueTime: '18:00',
     createdInDays: -8,
     maxMarks: 30,
     submissionLink: 'https://drive.google.com/drive/folders/joineazy-os-lab',
+    submissionType: 'individual',
   },
 ];
 
@@ -223,6 +263,18 @@ function pseudoMarks(assignment, studentId) {
 
 function studentsInCourse(course) {
   return students.filter((student) => student.enrolledCourses.includes(course));
+}
+
+export function getGroupForStudent(course, studentId) {
+  return groups.find(
+    (group) => group.course === course && group.memberIds.includes(studentId)
+  );
+}
+
+export function getGroupMembers(groupId) {
+  const group = groups.find((g) => g.id === groupId);
+  if (!group) return [];
+  return students.filter((student) => group.memberIds.includes(student.id));
 }
 
 export function createInitialData() {
